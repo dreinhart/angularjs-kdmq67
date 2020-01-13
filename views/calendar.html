@@ -1,0 +1,44 @@
+
+<div class="row-fluid">
+  <div class="span3">
+    <div class="sidebar-nav">
+      <div class="date">
+        <p class="current">{{dateToday | localtime | date:'EEEE, MMMM dd, yyyy'}}</p>
+        <div class="form-inline">
+          <label>Go To Date</label>
+          <div class="input-append">
+            <input class="my-date-picker" type="text" ng-model="dateToday" data-date-format="mm/dd/yyyy" bs-datepicker placeholder="mm/dd/yyyy">
+            <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="action-items">
+        <h1>Action Items:</h1>
+
+        <accordion close-others="true">
+          <accordion-group heading="{{item.title}} {{item.countText}}" ng-repeat="item in actionItems">
+            {{calendar.color}}
+            <div class="row-fluid action-item" ng-repeat="event in item.events" ng-style="{'background-color':event.status_color}" ng-click="editEvent(event.id)"><span class="span3 item-date">{{event.start | date:'MM/dd'}}</span><span class="span9 item-name">{{event.name}}</span></div>
+          </accordion-group>
+        </accordion>
+
+      </div>
+      <div class="calendar-list">
+        <h1>Calendars:</h1>
+        <button class="btn btn-block btn-calendar ng-class:{'disabled': !calendar.selected}" ng-style="{'background-color':calendar.color}" type="button" ng-repeat="calendar in calendars" ng-click="calendar.selected = !calendar.selected; calendarChange(calendar)">{{calendar.name}}</button>
+      </div>
+    </div>
+    <!--/.well -->
+  </div>
+  <!--/span-->
+  <div class="span9">
+    <div class="row">
+      <div>
+      <p align="center"><a class="btn" href="#events/create"><i class="icon-plus"></i> Add Event</a></p>
+      </div>
+      <div id="events-calendar" ui-calendar="uiConfig.fullCalendar" ng-model="eventSources"></div>
+    </div>
+    <!--/row--><!--/row-->
+  </div>
+  <!--/span-->
+</div>

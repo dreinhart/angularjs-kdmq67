@@ -1,0 +1,39 @@
+<form name="theForm" novalidate class="login-form">
+    <div class="modal-header">
+      <h4>Sign in</h4>
+    </div>
+    <div class="modal-body">
+      <div class="alert alert-warning" ng-show="authReason">
+        {{authReason}}
+      </div>
+      <div class="alert alert-error" ng-show="authError">
+        {{authError}}
+      </div>
+      <div ng-show="!forgot">
+        <div class="alert alert-info">Please enter your login details</div>
+        <label>Username</label>
+        <input name="username" type="text" ng-model="user.username" ng-required="!forgot" placeholder="Username" autofocus></input>
+        <span class="help-inline" ng-show="theForm.username.$invalid">*</span>
+        <label>Password</label>
+        <input name="password" type="password" ng-model="user.password" ng-required="!forgot" placeholder="Password"></input>
+        <span class="help-inline" ng-show="theForm.password.$invalid">*</span>
+        <p><a href="" ng-click="forgot=true">Forgot your password?</a></p>
+      </div>
+      <div ng-show="forgot">
+        <div class="alert alert-info">Enter your e-mail address and a new password to change your password</div>
+        <label>E-mail Address</label>
+        <input name="email" type="email" ng-model="user.email" ng-required="forgot" placeholder="E-mail Address" autofocus></input>
+        <span class="help-inline" ng-show="theForm.email.$invalid">*</span>
+        <label>New Password</label>
+        <input name="passwordrequest" type="password" ng-model="user.passwordRequest" title="{{theForm.passwordrequest.$error.message}}" placeholder="Password" ng-minlength="6" ng-required="forgot" ></input>
+        <span class="help-inline" ng-show="theForm.passwordrequest.$invalid">*</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary login" ng-click="login()" ng-disabled='theForm.$invalid' ng-show="!forgot">Sign in</button>
+        <button class="btn btn-primary login" ng-click="recover()" ng-disabled='theForm.$invalid' ng-show="forgot">Change Password</button>
+
+        <button class="btn clear" ng-click="clearForm()">Clear</button>
+        <button class="btn btn-warning cancel" ng-click="cancelLogin()">Cancel</button>
+    </div>
+</form>

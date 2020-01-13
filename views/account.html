@@ -1,0 +1,85 @@
+<form name="theForm" class="form-horizontal" novalidate>
+  <div class="modal-header">
+    <h4>My Account</h4>
+  </div>
+  <div class="modal-body">
+    <error-messages></error-messages>
+
+    <div class="controls-row">
+      <div class="control-group">
+      <label class="control-label">Username:</label>
+        <div class="controls">
+          <input type="text" ng-model="user.username" ng-disabled="true"></input>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="control-group">
+      <label class="control-label">E-mail:</label>
+        <div class="controls">
+          <input type="text" ng-model="user.email" ng-disabled="true"></input>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="control-group">
+      <label class="control-label">Name:</label>
+        <div class="controls">
+          <input name="username" type="text" ng-model="user.name" title="{{theForm.username.$error.message}}" placeholder="Name" ng-minlength="2" required />
+          <span class="help-inline" ng-show="theForm.username.$invalid">*</span>
+          <span class="help-inline" ng-show="theForm.username.$dirty && theForm.username.$invalid">Must be longer than 2 chars</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="control-group">
+      <label class="control-label">Phone:</label>
+        <div class="controls">
+          <input name="userphone" type="text" ng-model="user.phone" title="{{theForm.userphone.$error.message}}" placeholder="Phone Number" class="phone" />
+          <input name="userphoneext" type="text" ng-model="user.phone_ext" title="{{theForm.userphoneext.$error.message}}" placeholder="Ext" class="phone-ext" ng-maxlength="4" phone />
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="control-group">
+      <label class="control-label">Current Password:</label>
+        <div class="controls">
+          <input name="currentpassword" type="password" ng-model="user.currentPassword" title="{{theForm.currentpassword.$error.message}}" placeholder="Current Password" ng-required="user.newPassword" />
+          <span class="help-inline" ng-show="theForm.currentpassword.$invalid">*</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="control-group">
+      <label class="control-label">New Password:</label>
+        <div class="controls">
+          <input name="newpassword" type="password" ng-model="user.newPassword" title="{{theForm.newpassword.$error.message}}" placeholder="New Password" ng-minlength="6" />
+          <span class="help-inline" ng-show="theForm.newpassword.$invalid">*</span>
+          <span class="help-inline" ng-show="theForm.newpassword.$dirty && theForm.newpassword.$invalid">Must be longer than 6 chars</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="control-group">
+      <label class="control-label">New Password (again):</label>
+        <div class="controls">
+          <input name="newpassword2" type="password" ng-model="user.newPassword2" title="{{theForm.newpassword2.$error.message}}" placeholder="New Password (again)" ng-minlength="6" />
+          <span class="help-inline" ng-show="theForm.newpassword2.$invalid">*</span>
+          <span class="help-inline" ng-show="theForm.newpassword2.$dirty && theForm.newpassword2.$invalid">Must be longer than 6 chars</span>
+        </div>
+      </div>
+    </div>
+
+  <div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()" ng-disabled="theForm.$invalid || !changed()">Save</button>
+    <button class="btn btn-primary" ng-click="cancel()" >Cancel</button>
+  </div>
+</form>
+

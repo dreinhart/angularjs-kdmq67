@@ -1,0 +1,21 @@
+<header ng-controller="HeaderCtrl">
+  <!-- begin globalnav -->
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <div class="loading-indicator pull-left">
+        <div ng-controller="LoadingCtrl"><span ng-class="{'loading':loading}"></span></div>
+      </div>
+      <div class="container-fluid">
+        <a class="brand" href="#" title="{{appName}} v.{{appVersion}}">{{appName}}</a>
+        <ul class="nav">
+          <li ng-class="{active: location.path() == '/calendar'}"><a href="#/calendar" ng-show="isAuthenticated()">Calendar</a></li>
+          <li><a href="#/admin" ng-class="{active: location.path() == '/admin'}" ng-show="isAdmin()">Administration</a></li>
+          <li><a href="#/reports" ng-class="{active: location.path() == '/reports'}" ng-show="isAuthenticated()">Reports</a></li>
+        </ul>
+        <div class="pull-right"><a class="btn-clear" href="#/help"><i class="icon-white icon-question-sign"></i></a></div>
+        <login-toolbar></login-toolbar>
+      </div>
+    </div>
+  </div>
+  <!-- end globalnav -->
+</header>

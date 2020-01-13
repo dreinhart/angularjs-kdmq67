@@ -1,0 +1,150 @@
+ <form name="theForm" class="events-update form-horizontal" novalidate>
+  <div class="modal-header">
+    <div class="title" ng-style="{'background-color':calendarSelector.color}">
+      <h4 class="pull-left">
+        <span ng-show="event.id"><span ng-show="!readOnly(event)">Edit </span>Event ({{event.name}})</span>
+        <span ng-show="!event.id">Add Event</span>
+      </h4>
+      <div class="pull-right" style="margin:0"><span class="label" ng-class="{'label-success':!readOnly(event), 'label-important':readOnly(event)}">Owned by <a href="mailto:{{event.owner_email}}">{{event.owner_name}}</a></label></div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <div style="padding:15px">
+    <div class="alert alert-warning" ng-show="warningMsg"> {{warningMsg}} </div>
+    <div class="alert alert-error" ng-show="errorMsg"> {{errorMsg}} </div>
+    <div class="row-fluid event-details">
+      <div class="span8">
+        <div class="row-fluid">
+          <div class="span1">
+            <label>Name:</label>
+          </div>
+          <div class="span11">
+            <input class="span12" type="text" ng-model="event.name" placeholder="Name/Title of Event" required ng-readonly="readOnly(event)" />
+          </div>
+        </div>
+        <div class="row-fluid">
+          <div class="span1">
+            <label>Status:</label>
+          </div>
+          <div class="span5">
+            <select class="event-status" ng-model="event.status_id" ng-options="status.id as status.name for status in eventstatus" ng-disabled="readOnly(event)">
+              <option value="">--Choose--</option>
+            </select>
+          </div>
+          <div class="span1">
+            <div class="pull-right">
+              <label>Calendar:</label>
+            </div>
+          </div>
+          <div class="span5">
+            <select ng-model="calendarSelector" ng-options="calendar as calendar.name for calendar in allCalendars" required ng-disabled="readOnly(event)">
+              <option value="">--Choose--</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-fluid" ng-show="!hasRecurrence()">
+          <div class="span1">
+            <label>Start:</label>
+          </div>
+          <div class="span7">
+            <dmr-date-time ng-model="event.start" ng-readonly="readOnly(event)"></dmr-date-time>
+            <label class="checkbox inline"><input type="checkbox" ng-checked="checkedAllDay()" ng-click="clickAllDay()" ng-readonly="readOnly(event)"/>
+            All day</label></div>
+          <div class="span4">
+          </div>
+        </div>
+        <div class="row-fluid" ng-show="!hasRecurrence()">
+          <div class="span1">
+            <label>End:</label>
+          </div>
+          <div class="span7">
+            <dmr-date-time ng-model="event.end" ng-readonly="readOnly(event)"></dmr-date-time>
+            <button ng-click="editRecurrence(event.recurrence)" ng-show="!hasRecurrence() && !readOnly(event)"><i class="icon-repeat"></i></button>
+          </div>
+          <div class="span4"></div>
+        </div>
+        <div class="row-fluid" ng-show="hasRecurrence()">
+          <div class="span1">&nbsp;</div>
+          <div class="span1"><button ng-click="editRecurrence(event.recurrence)" ng-show="!readOnly(event)"><i class="icon-repeat"></i></button></div>
+          <div class="span10">{{event | recurrenceText}}</div>
+        </div>
+      </div>
+      <div class="span4">Event Description:<br />
+        <textarea class="span12" style="height:150px" ng-model="event.description" placeholder="Event Description" ng-readonly="readOnly(event)"></textarea>
+      </div>
+    </div>
+    <hr />
+    <div class="row-fluid">
+      <h5>Event Resources <button ng-click="manageResources()" ng-show="!readOnly(event)"><i class="icon-wrench"></i></button></h5>
+
+      <div class="row-fluid">
+        <div class="alert" ng-class="{'alert-error':requireDoors && !hasDoors(), 'alert-info':!requireDoors}">
+          <div class="span4">
+            <label class="checkbox inline"><input type="checkbox" ng-model="requireDoors"></input><strong>Door(s) Required!</strong></label>
+          </div>
+          <div class="span4">
+            Open Doors at: <div class="input-append">
+              <input name="eventdoorsopen" class="my-time-picker" type="text" ng-model="event.doors_open" data-minute-step="1" data-default-time="false" bs-timepicker placeholder="hh:mm AM" ng-readonly="readOnly(event)" ng-required="requireDoors" />
+              <button type="button" class="btn" ng-class="{'ng-invalid':theForm.eventdoorsopen.$invalid}" data-toggle="timepicker" ng-disabled="readOnly(event)"><i class="icon-time"></i></button>
+            </div>
+          </div>
+          <div class="span4">
+            Close Doors at: <div class="input-append">
+              <input name="eventdoorsclose" class="my-time-picker" type="text" ng-model="event.doors_close" data-minute-step="1" data-default-time="false" bs-timepicker placeholder="hh:mm AM" ng-readonly="readOnly(event)" ng-required="requireDoors" />
+              <button type="button" class="btn" ng-class="{'ng-invalid':theForm.eventdoorsclose.$invalid}" data-toggle="timepicker" ng-disabled="readOnly(event)"><i class="icon-time"></i></button>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+
+      <script type="text/ng-template"  id="tree_category_renderer.html">
+        <div class="category-header"><i class="icon-folder-close"></i> {{category.name}} ({{countResourcesInCategory(event.resources, category)}})</div>
+        <div class="category-contents">
+          <div class="row-fluid category" ng-repeat="category in categories | getByParentId:category.id" ng-include="'tree_category_renderer.html'"></div>
+          <div ng-include="'tree_resource_renderer.html'"></div>
+        </div>
+      </script>
+
+      <script type="text/ng-template"  id="tree_resource_renderer.html">
+        <div class="row-fluid resource" ng-class="{'unavailable':resource.quantity_available < 0, 'available':resource.quantity_available >= 0}" ng-class-even="'even'" ng-class-odd="'odd'" ng-repeat="resource in event.resources | getByCategoryId:category.id">
+          <div class="row-fluid">
+            <div class="span4"><i class="icon-file"></i> {{resource.name}}</div>
+            <div class="span3">{{resource.contact_name}}</div>
+            <div class="span4"><span tooltip="{{resource.notes}}">{{resource.notes | truncate:50}}</span></div>
+            <div class="span1">{{resource.quantity_requested}}</div>
+          </div>
+        </div>
+      </script>
+
+      <div class="resourcetree">
+        <tabs>
+          <pane ng-repeat="category in categories | getByParentId:0" heading="{{category.name}} ({{countResourcesInCategory(event.resources, category)}})" active="category.active">
+            <div class="row-fluid">
+              <div class="span4">
+                <button ng-click="manageResources()" ng-show="!readOnly(event)"><i class="icon-wrench"></i> Manage '{{category.name}}' Resources</button>
+              </div>
+            </div>
+            <div class="contents">
+              <div class="row-fluid heading">
+                <div class="span4 heading">Category/Resource Name</div>
+                <div class="span3 heading">Contact Name</div>
+                <div class="span4 heading">Notes</div>
+                <div class="span1 heading">Qty.</div>
+              </div>
+              <div class="row-fluid category" ng-repeat="category in categories | getByParentId:category.id" ng-include="'tree_category_renderer.html'" ng-show="countResourcesInCategory(event.resources, category) > 0"></div>
+              <div ng-include="'tree_resource_renderer.html'"></div>
+            </div>
+            <div class="alert alert-warning" ng-show="countResourcesInCategory(event.resources, category) == 0">No resources in this category.</div>
+          </pane>
+        </tabs>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" ng-click="delete()" ng-show="event.id && !readOnly(event)">Delete</button>
+    <button class="btn btn-primary" ng-click="save()" ng-disabled="theForm.$invalid || !changed() || !validateDoors()" ng-show="!readOnly(event)">Save</button>
+    <button class="btn btn-primary" ng-click="cancel()" >Cancel</button>
+  </div>
+</form>

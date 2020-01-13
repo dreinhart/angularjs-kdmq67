@@ -1,0 +1,72 @@
+<form name="theForm" class="form-horizontal" novalidate>
+  <div class="modal-header">
+    <h4>Manage Resources for ({{event.name}})</h4>
+  </div>
+  <div class="modal-body">
+    <error-messages></error-messages>
+
+    <script type="text/ng-template" id="tree_category_renderer.html">
+      <div class="category-header"><i class="icon-folder-close"></i> {{category.name}}</div>
+      <div class="category-contents">
+        <div class="row-fluid category" ng-repeat="category in categories | getByParentId:category.id" ng-include="'tree_category_renderer.html'"></div>
+        <div ng-include="'tree_resource_renderer.html'"></div>
+      </div>
+    </script>
+
+    <script type="text/ng-template" id="tree_resource_renderer.html">
+    <div class="resource" ng-class="{'unavailable':((resource.quantity_available < 0)), 'available': ((resource.quantity_requested > 0) && (resource.quantity_available >= 0))}" ng-class-even="'even'" ng-class-odd="'odd'" ng-show="showResource(resource)" ng-repeat="resource in resources | getByCategoryId:category.id" ngXclick="incrementQuantity(resource)">
+      <div class="row-fluid">
+        <div class="span4"><i class="icon-file"></i> {{resource.name}}</div>
+        <div class="span3">{{resource.contact_name}}</div>
+        <div class="span1 text-center">{{resource.setup}}</div>
+        <div class="span1 text-center">{{resource.teardown}}</div>
+        <div class="span1 text-center">{{resource.quantity_available - resource.quantity_requested}} of {{resource.quantity_inventory}}</div>
+        <div class="span1 text-center"><button class="btn" ng-click="resource.notes_collapse = !resource.notes_collapse"><span ng-show="resource.notes_collapse">Show</span><span ng-show="!resource.notes_collapse">Hide</span></button></div>
+        <div class="span1 text-center">
+          <input type="text" class="text-center" ng-min="0" ng-max="{{resource.quantity_available}}" ng-model="resource.quantity_requested" style="width:20px" ng-show="resource.quantity_inventory!=1" />
+          <input type="checkbox" ng-model="resource.quantity_requested" ng-checked="resource.quantity_requested" ng-show="resource.quantity_inventory==1"/>
+        </div>
+      </div>
+      <div class="row-fluid" collapse="resource.notes_collapse">
+        <div style="padding:10px">
+          <div class="span6"><span class="heading">Resource Notes:</span> {{resource.description}}</div>
+          <textarea class="span6" ng-model="resource.notes" placeholder="Your Notes"></textarea>
+        </div>
+      </div>
+    </div>
+    </script>
+
+    <div class="resourcetree">
+      <tabs>
+        <pane ng-repeat="category in categories | getByParentId:0" heading="{{category.name}}" active="category.active">
+          <!--div class="well"-->
+            <div class="row-fluid heading">
+              <div class="span4 heading">Category/Resource Name</div>
+              <div class="span3 heading">Contact Name</div>
+              <div class="span1 heading text-center">Setup</div>
+              <div class="span1 heading text-center">Teardown</div>
+              <div class="span1 heading text-center">Avail.</div>
+              <div class="span1 heading text-center">Notes</div>
+              <div class="span1 heading text-center">Qty.</div>
+            </div>
+            <div class="row-fluid category" ng-repeat="category in categories | getByParentId:category.id" ng-include="'tree_category_renderer.html'"></div>
+            <div ng-include="'tree_resource_renderer.html'"></div>
+          <!--/div-->
+        </pane>
+      </tabs>
+    </div>
+  <!--div>
+    <p>Event : {{event}}</p>
+    <p>Master: {{master}}</p>
+  </div-->
+  </div>
+  <div class="modal-footer">
+    <div class="pull-left">
+      <label class="checkbox inline"><input type="checkbox" ng-model="includeBooked"> Include Booked Resources</label>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" ng-click="close()" ng-disabled="theForm.$invalid" >Done</button>
+    </div>
+  </div>
+</form>
+

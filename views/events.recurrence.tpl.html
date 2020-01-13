@@ -1,0 +1,141 @@
+<form class="recurrence" name="theForm" class="form-horizontal" novalidate>
+  <div class="modal-header">
+    <h4>Recurrence of {{event.name}}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row-fluid">
+      <div class="span9 border-right">
+
+        <h5>Recurrence Pattern</h5>
+        <div class="row-fluid">
+          <div class="span2 border-right">
+            <label class="radio"><input type="radio" ng-model="controls.freq" value="3">Daily</label>
+            <label class="radio"><input type="radio" ng-model="controls.freq" value="2">Weekly</label>
+            <label class="radio"><input type="radio" ng-model="controls.freq" value="1">Monthly</label>
+            <label class="radio"><input type="radio" ng-model="controls.freq" value="0">Yearly</label>
+          </div>
+          <div class="span10">
+            <div class="daily" ng-show="controls.freq=='3'">
+              <p class="form-inline">
+                <label class="radio">
+                  <input type="radio" ng-model="controls.patternType" value="interval">
+                </label>Recur every <input type="number" ng-model="controls.interval" > day(s)
+              </p>
+              <p class="form-inline">
+                <label class="radio">
+                  <input type="radio" ng-model="controls.patternType" value="byDay">
+                </label>Recur every weekday
+              </p>
+            </div>
+            <div class="weekly" ng-show="controls.freq=='2'">
+              <p class="form-inline">
+                Recur every <input type="number" ng-model="controls.interval" > week(s) on:
+              </p>
+              <p class="form-inline">
+                <label class="checkbox" ng-repeat="day in controls.days"><input type="checkbox" ng-model="controls.days[$index].selected">{{day.name}}</label>
+              </p>
+            </div>
+            <div class="monthly" ng-show="controls.freq=='1'">
+              <p class="form-inline">
+                <label class="radio">
+                  <input type="radio" ng-model="controls.patternType" value="monthDay">
+                </label>Day <input type="number" ng-model="controls.monthDay" > of every <input type="number" ng-model="controls.interval" > month(s)
+              </p>
+              <p class="form-inline">
+                <label class="radio">
+                  <input type="radio" ng-model="controls.patternType" value="nthWeekDay">
+                </label>The
+                <select style="width:100px" ng-model="controls.nthDay">
+                  <option value="1">First</option>
+                  <option value="2">Second</option>
+                  <option value="3">Third</option>
+                  <option value="4">Fourth</option>
+                  <option value="5">Fifth</option>
+                </select>
+                <select style="width:100px" ng-model="controls.weekDay" ng-options="d.name for d in controls.days"></select> of every <input type="number" ng-model="controls.interval"> month(s)
+              </p>
+            </div>
+            <div class="yearly" ng-show="controls.freq=='0'">
+              <p class="form-inline">
+                Recur every <input type="number" ng-model="controls.interval" > year(s)
+              </p>
+              <p class="form-inline">
+                <label class="radio">
+                  <input type="radio" ng-model="controls.patternType" value="monthDay">
+                </label> On:
+                <select style="width:100px" ng-model="controls.month" disabled ng-options="m.name for m in months"></select>
+                <input type="number" ng-model="controls.monthDay" >
+              </p>
+              <p class="form-inline">
+                <label class="radio">
+                  <input type="radio" ng-model="controls.patternType" value="nthMonthDay">
+                </label> On the:
+                <select style="width:100px" ng-model="controls.nthDay">
+                  <option value="1">First</option>
+                  <option value="2">Second</option>
+                  <option value="3">Third</option>
+                  <option value="4">Fourth</option>
+                  <option value="5">Fifth</option>
+                </select>
+                <select style="width:100px" ng-model="controls.weekDay" ng-options="d.name for d in controls.days"></select> of <select style="width:100px" ng-model="controls.month" disabled ng-options="m.name for m in months"></select></select>
+              </p>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="row-fluid">
+          <div class="span7 border-right" style="height:200px">
+            <strong>Starts</strong>
+            <p class="form-inline">
+              <dmr-date-time ng-model="controls.start" name="start"></dmr-date-time>
+            </p>
+            <p class="span10 alert alert-error" ng-show="errorMsg">{{errorMsg}}</p>
+          </div>
+          <div class="span5">
+            <strong>Ends</strong>
+
+            <p class="form-inline">
+              <dmr-date-time name="endTime" ng-model="controls.endTime" show-date="false"></dmr-date-time>
+            </p>
+            <p class="form-inline">
+              <label class="radio">
+                <input type="radio" ng-model="controls.endType" value="count" />
+              </label> After: <input type="number" ng-model="controls.count" ng-max="99" /> occurrences
+            </p>
+            <div class="form-inline">
+              <label class="radio">
+                <input type="radio" ng-model="controls.endType" value="date" />
+              </label> By:
+              <div class="input-append">
+                <input class="my-date-picker" type="text" ng-model="controls.endDate" data-date-format="mm/dd/yyyy" bs-datepicker placeholder="mm/dd/yyyy" />
+                <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="span3">
+        <h5>Dates Selected<br/>
+        <small>(click to remove from recurrence)</small></h5>
+        <div class="dates-selected">
+          <div class="date-button" ng-repeat="myDate in datesSelected">
+            <button class="btn btn-sm ng-class:{'btn-success': myDate.selected, 'btn-danger': !myDate.selected}" ng-click="myDate.selected = !myDate.selected; setExDate()"><i class="icon-white icon-calendar"></i> {{myDate.date | date:'shortDate'}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" ng-click="save()" ng-disabled="theForm.$invalid">OK</button>
+    <button class="btn btn-primary" ng-click="close()" >Cancel</button>
+    <button class="btn btn-primary" ng-click="delete()">Delete Recurrence</button>
+  </div>
+</form>
+
+
+
+
+
+
+

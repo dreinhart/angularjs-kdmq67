@@ -1,0 +1,87 @@
+<h3>Help</h3>
+<p>{{name}} version {{version}}</p>
+
+<div class="well">
+<!--h3>Known Issues / Reminders:</h3-->
+<!--li>Re-Add redirect to /calendar in main.js</li-->
+<!--li>Change apiUri in app.js from api-dev to api</li-->
+<!--hr /-->
+<h3>Changelog:</h3>
+
+<h4>v.1.0.2</h4>
+<li>Fix: Reports with end date after DST change were not displaying correctly.</li>
+<li>Fix: Calendar action items not showing status background color.</li>
+
+<h4>v.1.0.1</h4>
+<li>Applied fix to date picker which prevented selecting dates after DST change.</li>
+
+<h4>v.1.0</h4>
+<li>Official launch!</li>
+
+<h4>v.0.7.1</h4>
+<li>Added small logo to top left</li>
+<li>Added exceptions to recurrence dialog.  Now lists all dates in recurrence and allows user to select exceptions.</li>
+
+<h4>v.0.7</h4>
+<li>Changed how "Doors" are handled, moved "Doors Required" alert, removed restraints from "Doors Open/Doors Closed", fixed requirements of both.</li>
+<li>Removed use of setup/teardown completely from Events to accomodate Doors Open/Doors Closed.</li>
+<li>Updated components, now using more .min files (including modified angular)</li>
+
+<h4>v.0.6.5</h4>
+<li>Added ability for user to change account info/password by clicking their name to the left of the 'Logout' button top/right.</li>
+<li>Completed: Right now there's no way for users to reset their own passwords. Nor a way to retrieve their username/passwords if they forgot them.</li>
+<li>Added button to list events using a resource and deleted them: 'How do I find a resource that has be used in an event so that I can delete it? Ex... Myrtle Beach.'</li>
+
+<h4>v.0.6.4</h4>
+<li>Added time to recurrence text.</li>
+<li>Added Reports</li>
+
+<h4>v.0.6.3</h4>
+<li>Added warning 'popup' when Event has a resource conflict.</li>
+<li>Fixed alignment (in Chrome) of checkbox with "Door(s) Required" on events/add/update
+<li>Changed "Leave Quantity blank if Resource can be used for more than one event at a time." to "[] Allow Overbooking" which allows a resource to be used on a variety of events with disregard to conflicts.</li>
+<li>Refactored controllers/events.js into individual controllers.</li>
+
+<h4>v.0.6.2</h4>
+<li>Completed Notes #3: They pointed out (without prompting) that the enter a quantity of 1 was clunky for resources that only have one (like doors.) So let's revisit that, if we can making some kind of checkbox or [SELECT] button appear if there's only one quantity for a resource. ---- On the Manage Resources screen (when adding a resource) if the resource doesn't have a quantity, e.g. doors, can we have a checkbox instead of a quantity field? Or some such mechanism that doesn't suggest there's more than one of that resource.</li>
+<li>Completed Notes #1. An Event, that requires doors, needs to have a "Door Open Time" and "Door Close Time" associated with it (required if Door(s) are selected.) The thought was we could actually replace "Setup" and "Teardown" with these fields. They don't feel those are needed. So could you replace those fields with 12:00 AM selection fields (like the start time and end time fields)?</li>
+<li>Completed Notes #2. They still feel that doors should be required somehow. Perhaps adding a checkbox that says (No Doors required) that has to be checked if they don't select a door. Even in that red box you have now would work.</li>
+<li>Completed Notes #6. If a resource has an email address associated with it, they would like to have the system email that address when the event is saved, showing the details of the event so they can see that resource has been scheduled.</li>
+<li>Added color to Add/Update Event title, same as color of calendar selected</li>
+<li>Completed Notes #7. Owner name to top right of add/update event (clickable to send email)</li>
+<li>Completed Notes #9. Removed admin/options.</li>
+
+<h4>v.0.6.1</h4>
+<li>Home page logo</li>
+<li>favicon</li>
+
+<h4>v.0.6</h4>
+<li>Feature: added 'ownership' of events.  Now a site user can only edit events created by him.  Site admins can edit any event.  Calendar Admins can edit any event on their calendar.</li>
+
+<h4>v.0.5</h4>
+<li>Feature: added colorpicker to admin/calendar/edit to make choosing colors of calendars easier
+
+<h4>v.0.4</h4>
+<li>Tweak: implemented Dale's calendar colors
+<li>Tweak: change admin/resources category/resource icons to be consistent
+<li>Tweak css for admin calendar colors to display in IE
+<li>Tweak css for calendar buttons to be consistent in IE etc.
+<li>Backend Fix: error creating new events with defined recurrence but only one actual occurence.</li>
+<li>Tweak nav bar html (remove navbar-fixed-top)</li>
+
+<h4>v.0.3</h4>
+<li>Administer Users for Roles on Roles screen</li>
+<li>Add sub category name to Add New dialog</li>
+<li>Admins of Calendars get email when event created on their calendar (with link to approve it.)</li>
+<li>Added default admin/user type</li>
+<li>Fixed css to make invalid email border red</li>
+<li>Add help button to top right of screen/ move help info/issues to help screen</li>
+<li>Added this changelog</li>
+</div>
+
+
+
+
+
+
+

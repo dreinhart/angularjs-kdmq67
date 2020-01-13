@@ -1,0 +1,109 @@
+<div class="row-fluid">
+  <div class="span4">
+    <div class="sidebar-nav reports-filters">
+      <form name="theForm" class="form-horizontal">
+
+        <div class="controls-group">
+          <label class="control-label">Report</label>
+          <div class="controls">
+            <select ng-model="selectReport" required>
+              <option value="">-- Choose --</option>
+              <option value="long">List of Events (Long)</option>
+              <option value="short">List of Events (Short)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="controls-group">
+            <label class="control-label">Start</label>
+            <div class="controls">
+              <input class="my-date-picker" type="text" ng-model="dateStart" data-date-format="mm/dd/yyyy" bs-datepicker placeholder="mm/dd/yyyy" required />
+              <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+            </div>
+        </div>
+
+        <div class="controls-group">
+            <label class="control-label">End</label>
+            <div class="controls">
+              <input class="my-date-picker" type="text" ng-model="dateEnd" data-date-format="mm/dd/yyyy" bs-datepicker placeholder="mm/dd/yyyy" required />
+              <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+            </div>
+        </div>
+
+        <div class="controls-group">
+          <label class="control-label">Calendar(s)</label>
+          <div class="controls">
+            <!--select multiple ng-multiple="true" ng-model="selectCalendarId" size="8" required>
+              <option value="{{calendar.id}}" ng-repeat="calendar in calendars">{{calendar.name}}</option>
+            </select-->
+
+            <select multiple ng-multiple="true" ng-model="selectCalendarId" size="8" required ng-options="calendar.id as calendar.name for calendar in calendars"></select>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <label class="control-label"></label>
+          <div class="controls">
+            <p><button ng-click="generateReport()" ng-disabled="theForm.$invalid">Create Report</button></p>
+            <p><button ng-click="print()" ng-disabled="!created">Print Report</button></p>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="span8 reports-contents">
+
+    <div ng-show="created && selectReport=='long'">
+      <h3 class="text-center">List of Events Report (Long Format)</h3>
+      <div class="text-center" ng-show="created">Created: {{created}}</div>
+
+      <div class="well well-small" ng-repeat="day in days" ng-show="events && selectReport=='long'">
+        <h5 class="day">{{day | date:'fullDate'}}</h5>
+
+        <div class="events">
+          <div class="well" ng-repeat="event in events | getByDay:day">
+            <h4>{{event.name}}</h4>
+            <p><span class="label">Calendar:</span> {{calendars | nameById:event.calendar_id}}</p>
+            <p><span class="label">Owner:</span> {{event.owner_name}}</p>
+            <p><span class="label">Start:</span> {{event.start | date:'short'}} <span class="label">End:</span> {{event.end | date:'short'}}</p>
+            <p><span class="label">Open Doors:</span> {{event.doors_open}} <span class="label">Close Doors:</span> {{event.doors_close}}</p>
+            <p><span class="label">Status:</span> {{eventStatuses | nameById:event.status_id}}</p>
+            <p><span class="label">Description:</span> {{event.description}}</p>
+            <p><span class="label">Resources:</span></p>
+            <ul>
+              <li style="margin-left:100px" ng-repeat="resource in event.resources">{{resource.name}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div ng-show="created && selectReport=='short'">
+      <h3 class="text-center">List of Events Report (Short Format)</h3>
+      <div class="text-center" ng-show="created">Created: {{created}}</div>
+
+      <div class="well well-small" ng-repeat="day in days" ng-show="events && selectReport=='short'">
+        <h5 class="day">{{day | date:'fullDate'}}</h5>
+
+        <div class="events">
+          <div class="well" ng-repeat="event in events | getByDay:day">
+            <div class="row-fluid">
+              <div class="span5"><strong>{{event.name}}</strong></div>
+              <div class="span3">{{event.start | date:'shortTime'}} - {{event.end | date:'shortTime'}}</div>
+              <div class="span4">
+                <ul>
+                  <li ng-repeat="resource in event.resources">{{resource.name}}</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-info text-center" ng-show="created && !events">
+      There are no events matching your criteria.
+    </div>
+  </div>
+</div>

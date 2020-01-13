@@ -1,0 +1,9 @@
+<div class="input-append" ng-show="showDate">
+  <input class="my-date-picker" type="text" ng-model="myDate" data-date-format="mm/dd/yyyy" bs-datepicker placeholder="mm/dd/yyyy" ng-readonly="isReadOnly" />
+  <button type="button" class="btn" data-toggle="datepicker" ng-disabled="isReadOnly"><i class="icon-calendar"></i></button>
+</div>
+
+<div class="input-append" ng-show="showTime">
+  <input class="my-time-picker" type="text" ng-model="myTime" data-minute-step="1" bs-timepicker placeholder="hh:mm AM" ng-readonly="isReadOnly" />
+  <button type="button" class="btn" data-toggle="timepicker" ng-disabled="isReadOnly"><i class="icon-time"></i></button>
+</div>
